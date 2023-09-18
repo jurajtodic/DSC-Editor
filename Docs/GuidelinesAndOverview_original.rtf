@@ -1,0 +1,101 @@
+{\rtf1\ansi\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset0 Calibri;}{\f1\fnil\fcharset238 Calibri;}}
+{\colortbl ;\red0\green0\blue255;}
+{\*\generator Riched20 10.0.19041}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\f0\fs22\lang9 Pozdrav ekipa,\par
+\par
+kao \f1\'9ato smo pri\'e8ali ju\'e8er, u nastavku mo\'9eete prona\'e6i smjernice, literaturu i predlo\'9eenu raspodjelu za po\'e8etak rada na projektu.\par
+\par
+\par
+Smjernice:\par
+(i) Preporu\'e8am da svatko od vas poku\'9aa osposobiti "Hello World" web aplikaciju prema primjeru [1]. Ideja iza toga je da svi vidite kako izgleda "cjelokupna" slika nekakve web aplikacije, backend/fronted dijelovi, gdje je baza u toj pri\'e8i i sl. kako bi znali gdje radite svoj dio te gdje/na kojim dijelovima kolege rade.\par
+\par
+(ii) Backend - iako primjer [1] prikazuje kako osposobiti Spring backend, sve \'9ato vam dodatno bude trebalo ili ako \'9eelite znati \'9ato to\'e8no pojedini dio radi i kako, tu je [2] kao slu\'9ebena Spring dokumentacija.\par
+\par
+(iii) Frontend - kako biste se upoznali s React-om ne vidim bolji pristup od slu\'9ebenog tutorial-a [3] ili [4] (ovisno o tome \'9ato vi\'9ae preferirate).\par
+\par
+(iv) Monaco editor - svu potrebnu dokumentaciju, odnosno kako korisiti sam editor je mogu\'e6e prona\'e6i na [5] s dobrom koli\'e8inom primjera. Za potrebe IntelliSense feature-a primjer je mogu\'e6e prona\'e6i na [7].\par
+\par
+(v) Tablica (data table) koja \'e6e se koristi za prikaz podataka predla\'9eem da bude neka od ve\'e6 postoje\'e6ih, kao \'9ato je npr. [8] pa je pro\'9airite po potrebi, ili koristite isti repozitorij [9] kako biste prona\'9ali nekakvu drugu verziju tablice ili op\'e6enito React komponente.\par
+Tako\'f0er, mo\'9eete pogledati i korisiti npr. [10] kao tablicu i op\'e6enito sve na toj stranici kao temu i gotove komponente. [11] sadr\'9ei neke od beslatnih admin tema koje sadr\'9ee sve komponente koje \'e6e vam trebati.\par
+\par
+(vi) Preporu\'e8am za po\'e8etak (mock) H2 bazu kao \'9ato je u primjeru [1] dok bi se prototip spojio na MySQL bazu s tablicom koja bi izgledala ovako:\par
+\par
+ID (int) | Type (char(255)) | Name (char(255)) | Active (boolean/tinyint(1)) | Content (longblob)\par
+1 | Type1 | Type1Name1 | 0 | whole_configuration_1v1\par
+2 | Type2 | Type2Name1 | 1 | whole_configuration_2\par
+3| Type1 | Type1Name2 | 1 | whole_configuration_1v2\par
+\par
+ID - je ujedno i verzija konfiguracije; spremanje nove ili izmijenjene konfiguracije zna\'e8i novi redak u tablici s auto-inkrementalnim ID-em tako da se nikad ne mogu pojaviti dva ista ID-a.\par
+\par
+(vii) S obzirom da je ovo prototip te radi bolje raspodjele taskova, predla\'9eem da web editor ipak dio posla odradi sam. To bi zna\'e8ilo npr. da backend odradi nekakvu "skuplju" validaciju (\'9ato ovdje ba\'9a i ne\'e6e biti slu\'e8aj, dok bi u stvarnosti bio) dok bi klijent/browser odradio stvari kao \'9ato je bojanje koda/konfiguracije (npr. druga\'e8ije bojanje property-a naspram vrijednosti te komentara). Code completion mo\'9ee biti velik problem te je usko vezan uz domenu (\'9ato vama nije bitno), pa bih za po\'e8etak postavio cilj code completion-a na to da editor sam automatski zatvori viti\'e8astu zagradu (kad se prvi puta unese otvorena).\par
+Backend bi se onda slu\'9eio za provjeru ispravnosti koda/konfiguracije gdje bi provjerio, za po\'e8etak, jesu li sve viti\'e8aste zagrade zatvorene. Nakon \'9ato bi dobio od frontend-a konfiguraciju u HTTP request-u koji bi se slao na "Save" i/ili nakon \'9ato bi korisnik prestao tipkati plus neki t (npr. pet sekundi).\par
+\par
+(viii) Pravi pristup validaciji bi bila izrada gramtike, odnosno tokena, lexer-a i parser-a kao \'9ato mo\'9eete vidjeti na [12]. Me\'f0utim, to je poprili\'e8no velika tema, ali s obzirom na jednostavnost konfiguracija u ovom projektu (u nastavku), jednostavna prototip verzija je sasvim dovoljna za detekciju ne zatvorenih viti\'e8astih zagrada.\par
+\par
+(ix) Struktura domenski specifi\'e8ne konfiguracije:\par
+\par
+Node \{\par
+    # comment1\par
+    Sub-Node-1-1 = Value\par
+    Sub-Node-1-2 \{\par
+        Sub-Node-2-1 = Value\par
+        # comment2\par
+        Sub-Node-2-2 \{\par
+            ...Sub-Node-N \{\par
+\par
+            \}\par
+        \}\par
+        Sub-Node-2-3 \{\par
+            # comment3\par
+            Value1\par
+        \}\par
+        Sub-Node-2-4 \{\par
+            Value1, Value2, ...ValueN\par
+        \}\par
+        Sub-Node-2-5 \{\par
+            Value1,\par
+            Value2, # comment4\par
+            ...ValueN\par
+        \}\par
+    \}\par
+\}\par
+\par
+Primjer prema tablici u bazi podataka (vi):\par
+\par
+Type1 \{\par
+    Type1Name1 \{\par
+        Property1 = Value1\par
+        Property2 = Value2\par
+        # comment1\par
+        Property3 \{\par
+            Value3\par
+        \}\par
+    \}\par
+\}\par
+\par
+(x) Cilj projekta, potrebno je izraditi REST servis u Spring-u koji se spaja na MySQL bazu podataka iz koje iz\'e8itava postoje\'e6e domenski specifi\'e8ne konfiguracije i po\'9aalje ih u HTTP response-u na HTTP request koji dobije od React/JS frontend-a nakon \'9ato korisnik u browser-u unese odre\'f0en URL (URL aplikacije). Popis konfiguracija je mogu\'e6e vidjeti u nekakvoj tablici u browser-u, te je iste mogu\'e6e pretra\'9eiti ili sortirati. Za potrebe tablice sam sadr\'9eaj konfiguracije nije potrebno poslati iz backend-a, ve\'e6 samo podatke kao \'9ato je tip, naziv, verzija i status aktivnosti. Nakon \'9ato se odabere neka od konfiguracija iz tablice, otvara se Monaco editor sa sadr\'9eajem konfiguracije koju je frontend zatra\'9eio od backend-a koriste\'e6i verziju odabrane konfiguracije (\'9ato je ujedno i ID konfiguracije u bazi podataka). Sam editor ima mogu\'e6nost bojanja sintakse (razlika izme\'f0u property-a, vrijednosti i komentara), te periodi\'e8no ili na poseban gumb aktivira validaciju. Validacija se aktivira tako da frontent po\'9aalje backend-u u HTTP request-u trenutni sadr\'9eaj konfiguracije koji backend validira i vrati nazad frontend-u (u HTTP response-u) s nekakvim indikatorom u samom sadr\'9eaju koja zagrada nije zatvorena kako bi editor to mogao "izcrtati" (ako uop\'e6e postoji ikakav problem sa zagradam). U slu\'e8aju da korisnik u editor-u unese otvorenu viti\'e8astu zagradu, ista se odmah mora zatvoriti na sljede\'e6em retku na istoj razini (uvla\'e8enje), code completion. U trenutku kad korisnik pritisne tipku "Save" radi se identi\'e8na validacija kao ranije opisana, samo \'9ato se dodatno stvara novi redak u tablici s tom konfiguracijom (nije mogu\'e6e, u bazi podataka, editirati ve\'e6 dodanu konfiguraciju).\par
+Ostale mogu\'e6nosti mo\'9eemo dogovoriti po potrebi, ali bi prvenstveno uklju\'e8ivali pro\'9airenu validaciju, opciju dodavanja nove konfiguracije i brisanje postoje\'e6e, aktiviranje/deaktiviranje konfiguracije, formu za odabir baze podataka, import/export i sl.\par
+\par
+\par
+Literatura:\par
+[1] Spring Boot React CRUD - {{\field{\*\fldinst{HYPERLINK https://www.baeldung.com/spring-boot-react-crud }}{\fldrslt{https://www.baeldung.com/spring-boot-react-crud\ul0\cf0}}}}\f1\fs22\par
+[2] Spring Documentation/101 - {{\field{\*\fldinst{HYPERLINK https://docs.spring.io/spring-boot/docs/current/ }}{\fldrslt{https://docs.spring.io/spring-boot/docs/current/\ul0\cf0}}}}\f1\fs22\par
+[3] React 101 step-by-step - {{\field{\*\fldinst{HYPERLINK https://reactjs.org/docs/hello-world.html }}{\fldrslt{https://reactjs.org/docs/hello-world.html\ul0\cf0}}}}\f1\fs22\par
+[4] React 101 - {{\field{\*\fldinst{HYPERLINK https://reactjs.org/tutorial/tutorial.html }}{\fldrslt{https://reactjs.org/tutorial/tutorial.html\ul0\cf0}}}}\f1\fs22\par
+[5] React Monaco Editor - {{\field{\*\fldinst{HYPERLINK https://www.npmjs.com/package/@monaco-editor/react }}{\fldrslt{https://www.npmjs.com/package/@monaco-editor/react\ul0\cf0}}}}\f1\fs22\par
+[6] Monaco Editor - {{\field{\*\fldinst{HYPERLINK https://microsoft.github.io/monaco-editor/ }}{\fldrslt{https://microsoft.github.io/monaco-editor/\ul0\cf0}}}}\f1\fs22\par
+[7] Custom React Monaco Editor with custom validation, highlighter, formatter, etc. - {{\field{\*\fldinst{HYPERLINK https://blog.expo.dev/building-a-code-editor-with-monaco-f84b3a06deaf }}{\fldrslt{https://blog.expo.dev/building-a-code-editor-with-monaco-f84b3a06deaf\ul0\cf0}}}}\f1\fs22\par
+[8] React Data Table - {{\field{\*\fldinst{HYPERLINK https://www.npmjs.com/package/react-data-table-component }}{\fldrslt{https://www.npmjs.com/package/react-data-table-component\ul0\cf0}}}}\f1\fs22\par
+[9] React/JS packages repo - {{\field{\*\fldinst{HYPERLINK https://www.npmjs.com/package/ }}{\fldrslt{https://www.npmjs.com/package/\ul0\cf0}}}}\f1\fs22\par
+[10] AdminLTE3 theme - {{\field{\*\fldinst{HYPERLINK https://adminlte.io/themes/v3/pages/tables/data.html }}{\fldrslt{https://adminlte.io/themes/v3/pages/tables/data.html\ul0\cf0}}}}\f1\fs22\par
+[11] Free themes - {{\field{\*\fldinst{HYPERLINK https://adminlte.io/blog/free-admin-panels/ }}{\fldrslt{https://adminlte.io/blog/free-admin-panels/\ul0\cf0}}}}\f1\fs22\par
+[12] Parsing in Java - {{\field{\*\fldinst{HYPERLINK https://tomassetti.me/parsing-in-java/ }}{\fldrslt{https://tomassetti.me/parsing-in-java/\ul0\cf0}}}}\f1\fs22\par
+\par
+\par
+Predlo\'9eena raspodjela:\par
+(i) Spring backend (CRUD, communication with frontend, etc.)\par
+(ii) Validation (Grammar, Lexer, Parser for domain specific configurations)\par
+(ii) React frontend (UI controls, searchable data table) + JS communication with backend\par
+(iii) Custom Monaco editor as React component with syntax highlighter and code completion\f0\par
+}
+ 
